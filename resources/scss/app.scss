@@ -1,0 +1,38 @@
+$primary-color: #3490dc;
+$secondary-color: #ffed4a;
+
+// Mixin
+@mixin border-radius($radius) {
+    border-radius: $radius;
+}
+
+// Styling
+body {
+    background-color: $primary-color;
+    color: white;
+    font-family: Arial, sans-serif;
+
+    .container {
+        color: $secondary-color;
+        @include border-radius(5px);
+    }
+}
+
+button {
+    background-color: $secondary-color;
+    padding: 10px 20px;
+    border: none;
+    @include border-radius(8px);
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+    }
+}
+
+
+.container {
+    background-color: $primary-color;
+    h1 {
+        color: $secondary-color;
+    }
+}
