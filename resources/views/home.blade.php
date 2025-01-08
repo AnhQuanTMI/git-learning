@@ -10,9 +10,13 @@
 <body>
     <div class="container">
         <h1>
-            Hello World!
+            Hello {{ Auth::user()->name }}!
         </h1>
-        <button>hehehaha</button>
+        <form action="{{ route('welcome-email') }}" method="POST">
+            @csrf
+            <input type="hidden" name="id" value="{{ Auth::user()->id }}">
+            <button type="submit" class="">hehehaha</button>
+        </form>
     </div>
 </body>
 </html>

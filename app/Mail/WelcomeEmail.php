@@ -3,26 +3,53 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class WelcomeEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user; // Dữ liệu sẽ truyền vào email
+    public $message;
 
-    public function __construct($user)
+    /**
+     * Create a new message instance.
+     */
+    public function __construct($message)
     {
-        $this->user = $user; // Gán dữ liệu cho email
+        $this->message = $message;
     }
 
-    public function build()
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
     {
-        return $this->view('emails.welcome') // Đường dẫn view
-                    ->subject('Welcome to Our Platform') // Tiêu đề email
-                    ->with([
-                        'userName' => $this->user->name, // Biến truyền vào view
-                    ]);
+        return new Envelope(
+            subject: 'Welcome Email',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'emails.welcome',
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

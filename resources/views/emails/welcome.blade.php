@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-    <h1>Welcome, {{ $userName }}!</h1>
-    <p>Thank you for registering on our platform. We're excited to have you!</p>
+    <p class="">{{ $message }}</p>
 </body>
 </html>
