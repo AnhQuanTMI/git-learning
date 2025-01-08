@@ -21,6 +21,7 @@ body {
 button {
     background-color: $secondary-color;
     padding: 10px 20px;
+    color: white;
     border: none;
     @include border-radius(8px);
 
