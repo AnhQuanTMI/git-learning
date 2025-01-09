@@ -5,13 +5,24 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Symfony\Component\HttpFoundation\Response;
 
 class StudentController extends Controller
 {
     public function index()
     {
-        $students = Student::all();
-        return response()->json($students);
+        $students = Student::orderBy('name')->paginate(10);
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Students retrieved successfully',
+            'data' => $students->items(),
+            'meta' => [
+                'current_page' => $students->currentPage(),
+                'total_pages' => $students->lastPage(),
+                'total_items' => $students->total(),
+            ]
+        ], Response::HTTP_OK);
     }
 
     public function store(Request $request)
@@ -22,12 +33,28 @@ class StudentController extends Controller
         ]);
 
         $student = Student::create($validated);
-        return response()->json($student, 201);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Student created successfully',
+            'data' => $student
+        ], Response::HTTP_CREATED);
     }
 
     public function show(Student $student)
     {
-        return response()->json($student);
+        if (!$student) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Student not found',
+                'error' => 'Student with the given ID does not exist'
+            ], Response::HTTP_NOT_FOUND);
+        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Student details retrieved successfully',
+            'data' => $student
+        ], Response::HTTP_OK);
     }
 
     public function update(Request $request, Student $student)
@@ -38,12 +65,30 @@ class StudentController extends Controller
         ]);
 
         $student->update($validated);
-        return response()->json($student);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Student updated successfully',
+            'data' => $student
+        ], Response::HTTP_OK);
     }
 
     public function destroy(Student $student)
     {
-        $student->delete();
-        return response()->json(null, 204);
+        $deleted = $student->delete();
+        
+        if (!$deleted) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to delete student',
+                'error' => 'Student not found or could not be deleted'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Student deleted successfully',
+            'data' => null
+        ], Response::HTTP_NO_CONTENT);
     }
 }
